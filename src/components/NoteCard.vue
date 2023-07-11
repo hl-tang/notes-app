@@ -27,6 +27,7 @@
 
 <script setup>
 import { defineProps, toRefs, ref } from "vue";
+import { useNotesStore } from '../stores/notes'
 
 const props = defineProps({
     id: Number,
@@ -37,10 +38,14 @@ const props = defineProps({
 
 const { id, text, date, backgroundColor } = toRefs(props);
 
+const notesStore = useNotesStore()
+
 const deleteNote = (noteId) => {
-  const index = notes.value.findIndex(note => note.id === noteId);
+  const index = notesStore.notes.findIndex(note => note.id === noteId);
   if (index !== -1) {
-    notes.value.splice(index, 1);
+    //pinia定义的东西，使用时不用.value
+    // notesStore.notes.value.splice(index, 1);
+    notesStore.notes.splice(index, 1);
   }
 }
 </script>

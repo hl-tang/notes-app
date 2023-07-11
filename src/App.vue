@@ -90,14 +90,16 @@
     <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
   </el-card> -->
 
-  <!-- {{ notes }} -->
+  {{ notesStore.notes }}
 
   <!-- cards-container -->
   <!-- flex-wrap自动换行 -->
   <!-- 第一个card的垂直位置 和其他的不一样 ！！！ -->
   <div class="flex flex-wrap justify-start m-4 p-4 space-x-16 space-y-10">
     <!-- card -->
-    <div v-for="note in notes" :key="note.id"
+
+    <!-- card写在App.vue的やり方、冗余 -->
+    <!-- <div v-for="note in notes" :key="note.id"
       class="w-1/5 h-[225px] overflow-hidden flex flex-col justify-between rounded-xl shadow-2xl  hover:ring-2 ring-gray-500"
       :style="{ backgroundColor: note.backgroundColor }">
 
@@ -118,19 +120,23 @@
       </div>
 
       <p class="date self-end pr-2">{{ note.date }}</p>
-    </div>
+    </div> -->
 
+    <!-- card单独作为一个component,但这样notes配列要变成全局能访问的state(card的删除按钮要操作notes配列)，需要状态管理 -->
     <!-- 这里v-for class用了w-1/5，组件那里就改成w-full，不然变成1/5的1/5 -->
-    <!-- <div v-for="note in notesStore.notes" :key="note.id" 
+    <div v-for="note in notesStore.notes" :key="note.id" 
       class="w-1/5 h-[225px] overflow-hidden flex flex-col justify-between rounded-xl shadow-2xl  hover:ring-2 ring-gray-500"
     >
+    <!-- <div v-for="note in notes" :key="note.id" 
+      class="w-1/5 h-[225px] overflow-hidden flex flex-col justify-between rounded-xl shadow-2xl  hover:ring-2 ring-gray-500"
+    > -->
       <NoteCard 
         :id="note.id"
         :text="note.text"
         :date="note.date"
         :backgroundColor="note.backgroundColor"
       />
-    </div> -->
+    </div>
 
 
   </div>
@@ -151,7 +157,7 @@ const toggleDark = useToggle(isDark)
 import { Sunny, Moon } from '@element-plus/icons-vue'
 
 const newNote = ref("")
-const notes = ref([]) //放在stores里，全局访问
+// const notes = ref([]) //放在stores里，全局访问
 const notesStore = useNotesStore()
 
 const errorMsg = ref("")  //newNote不为空才能add
@@ -163,7 +169,13 @@ function getRandomLightColor() {
 // 硬要说bug的话，其实可以添加一个空note
 const addNote = () => {
   if (newNote.value.length > 0) {
-    (notes).value.push({
+    // window.alert(JSON.stringify(notesStore.notes))
+    // window.alert(notesStore.notes == null ? "null":"not null")
+    // window.alert(notesStore.notes.value)
+    //!!!!!
+    //pinia定义的东西，使用时不用.value
+    (notesStore.notes).push({
+    // (notes).value.push({
       id: Math.floor(Math.random() * 1000000),  //可以用uuid库
       text: newNote.value,
       date: new Date(),
@@ -178,12 +190,12 @@ const addNote = () => {
   }
 }
 
-const deleteNote = (noteId) => {
-  const index = notes.value.findIndex(note => note.id === noteId);
-  if (index !== -1) {
-    notes.value.splice(index, 1);
-  }
-};
+// const deleteNote = (noteId) => {
+//   const index = notes.value.findIndex(note => note.id === noteId);
+//   if (index !== -1) {
+//     notes.value.splice(index, 1);
+//   }
+// };
 </script>
 
 
