@@ -36,7 +36,7 @@
     </el-button>
   </div>
 
-
+  <!-- 点击+按钮后跳出来的文本编辑框 -->
   <div v-show="isWriteNote" id="AuthOverlay"
     class="fixed flex justify-center items-center z-50 top-0 left-0 w-full h-full bg-black bg-opacity-50">
     <div class="relative bg-white w-full max-w-[470px] h-[55%] p-4 rounded-lg">
@@ -90,7 +90,8 @@
     <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
   </el-card> -->
 
-  {{ notesStore.notes }}
+  <!-- 记录各个标签条的数组，开发时显示，最后注释掉隐藏 -->
+  <!-- {{ notesStore.notes }} -->
 
   <!-- cards-container -->
   <!-- flex-wrap自动换行 -->
